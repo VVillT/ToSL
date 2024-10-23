@@ -1,4 +1,3 @@
-matplotlib
 base58==2.1.1
 json5==0.9.5
 lxml==4.5.2

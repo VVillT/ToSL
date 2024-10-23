@@ -9,7 +9,7 @@ st.subheader('Making Prediction')
 st.markdown('**Please provide information of the passenger and we will see how likely he will survive**:')  # you can use markdown like this
 
 # load models
-tree_clf = joblib.load('clf-best.pickle')
+tree_clf = joblib.load('gbc_best.pickle')
 
 # get inputs
 

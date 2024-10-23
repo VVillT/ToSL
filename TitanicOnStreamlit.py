@@ -1,7 +1,11 @@
 import streamlit as st
 import pandas as pd
 import joblib
-
+#---------------------------------#
+# Page layout
+## Page expands to full width
+st.set_page_config(layout="wide")
+#---------------------------------#
 st.title('Titanic Survival Analysis and Prediction')
 
 st.subheader('Making Prediction')
@@ -19,9 +23,6 @@ sib_sp = int(st.number_input('# of siblings / spouses aboard:', 0, 10, 0))
 pclass = st.selectbox('Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)', [1, 2, 3])
 fare = int(st.number_input('# of parents / children aboard:', 0, 100, 0))
 #embarked = st.selectbox('Port of Embarkation (C = Cherbourg, Q = Queenstown, S = Southampton)', ['C', 'Q', 'S'])
-
-# this is how to dynamically change text
-prediction_state = st.markdown('calculating...')
 
 passenger = pd.DataFrame(
     {
@@ -42,4 +43,4 @@ if y_pred[0] == 0:
 else:
     msg = 'This passenger is predicted to be: **survived**'
 
-prediction_state.markdown(msg)
+st.write(msg)

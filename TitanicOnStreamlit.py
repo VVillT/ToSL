@@ -59,17 +59,17 @@ transformed_passenger = transform_passenger_data(passenger)
 transformed_passenger
 
 # load models
-#tree_clf = joblib.load('rf_optimal.pickle')
-uploaded_file = st.file_uploader("Upload Model")
+clf2 = joblib.load('rf_optimal.sav')
+#uploaded_file = st.file_uploader("Upload Model")
 
 
-if uploaded_file is not None:
-    clf2 = pickle.loads(uploaded_file.read())
-    st.write("Model loaded")
-    st.write(clf2)
-    st.write("Predicting...")
-    st.write(clf2.predict(passenger))
-    st.write("Done!")
+#if uploaded_file is not None:
+    #clf2 = pickle.loads(uploaded_file.read())
+    #st.write("Model loaded")
+    #st.write(clf2)
+    #st.write("Predicting...")
+    #st.write(clf2.predict(passenger))
+    #st.write("Done!")
 
 y_pred = clf2.predict(passenger)
 predtest = clf2.predict_proba(passenger)

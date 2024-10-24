@@ -61,10 +61,11 @@ transformed_passenger
 
 
 y_pred = tree_clf.predict(passenger)
+predtest = tree_clf.predict_proba(passenger)
 
 if y_pred[0] == 0:
-    msg = 'This passenger is predicted to be: **died**'
+    msg = 'This passenger is predicted to have {:.2f} chance to be: **died**'.format(predtest[0]*100)
 else:
-    msg = 'This passenger is predicted to have {:.2f} chance to be:be: **survived**'.format(predtest[1]*100)
+    msg = 'This passenger is predicted to have {:.2f} chance to be: **survived**'.format(predtest[1]*100)
 
 st.write(msg)

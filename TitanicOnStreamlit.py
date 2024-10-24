@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import sklearn as skl
+from sklearn.ensemble import GradientBoostingClassifier
 import joblib
 #---------------------------------#
 # Page layout
@@ -58,11 +60,10 @@ transformed_passenger
 
 
 
-y_pred = tree_clf.predict(transformed_passenger)
-predtest = tree_clf.predict_proba(transformed_passenger)
+y_pred = tree_clf.predict(passenger)
 
 if y_pred[0] == 0:
-    msg = 'This passenger is predicted to have {:.2f} chance to be: **died**'.format(predtest[0]*100)
+    msg = 'This passenger is predicted to be: **died**'
 else:
     msg = 'This passenger is predicted to have {:.2f} chance to be:be: **survived**'.format(predtest[1]*100)
 

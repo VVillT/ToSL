@@ -13,8 +13,7 @@ st.title('Titanic Survival Analysis and Prediction')
 st.subheader('Making Prediction')
 st.markdown('**Please provide information of the passenger and we will see how likely he will survive**:')  # you can use markdown like this
 
-# load models
-tree_clf = joblib.load('rf_optimal.pickle')
+
 
 # get inputs
 
@@ -58,7 +57,8 @@ def transform_passenger_data(passenger_data):
 transformed_passenger = transform_passenger_data(passenger)
 transformed_passenger
 
-
+# load models
+tree_clf = joblib.load('rf_optimal.pickle')
 
 y_pred = tree_clf.predict(passenger)
 predtest = tree_clf.predict_proba(passenger)

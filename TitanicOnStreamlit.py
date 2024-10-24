@@ -57,8 +57,7 @@ def transform_passenger_data(passenger_data):
     
     return df_transformed
 
-transformed_passenger = transform_passenger_data(passenger)
-transformed_passenger
+
 
 
 #---------------------------------#
@@ -85,9 +84,13 @@ st.write(x_train.columns)
 # Random Forest Classifier
 rf = RandomForestClassifier(random_state=0)
 rf.fit(x_train, y_train)
+st.write('Forecast Done')  
 
-y_pred = rf.predict(passenger)
-predtest = rf.predict_proba(passenger)
+transformed_passenger = transform_passenger_data(passenger)
+
+
+y_pred = rf.predict(transformed_passenger)
+predtest = rf.predict_proba(transformed_passenger)
 
 if y_pred[0] == 0:
     msg = 'This passenger is predicted to have {:.2f} chance to be: **died**'.format(predtest[0]*100)

@@ -38,7 +38,8 @@ passenger = pd.DataFrame(
 
 #y_pred = tree_clf.predict(passenger)
 y_pred = 1
-if y_pred[0] == 0:
+#if y_pred[0] == 0:
+if y_pred == 0:
     msg = 'This passenger is predicted to be: **died**'
 else:
     msg = 'This passenger is predicted to be: **survived**'

@@ -3,6 +3,7 @@ import pandas as pd
 import sklearn as skl
 from sklearn.ensemble import GradientBoostingClassifier
 import joblib
+import pickle
 #---------------------------------#
 # Page layout
 ## Page expands to full width
@@ -58,10 +59,20 @@ transformed_passenger = transform_passenger_data(passenger)
 transformed_passenger
 
 # load models
-tree_clf = joblib.load('rf_optimal.pickle')
+#tree_clf = joblib.load('rf_optimal.pickle')
+uploaded_file = st.file_uploader("Upload Model")
 
-y_pred = tree_clf.predict(passenger)
-predtest = tree_clf.predict_proba(passenger)
+
+if uploaded_file is not None:
+    clf2 = pickle.loads(uploaded_file.read())
+    st.write("Model loaded")
+    st.write(clf2)
+    st.write("Predicting...")
+    st.write(clf2.predict(passenger))
+    st.write("Done!")
+
+y_pred = clf2.predict(passenger)
+predtest = clf2.predict_proba(passenger)
 
 if y_pred[0] == 0:
     msg = 'This passenger is predicted to have {:.2f} chance to be: **died**'.format(predtest[0]*100)

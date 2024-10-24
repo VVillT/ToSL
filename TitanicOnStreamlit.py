@@ -96,8 +96,8 @@ y_pred = rf.predict(transformed_passenger)
 st.write(y_pred)
 st.write(y_pred[0])
 predtest = rf.predict_proba(transformed_passenger)
-st.write(predtest[0]*100)
-st.write(predtest[1]*100)
+st.write(predtest[0])
+st.write(predtest[1])
 
 if y_pred == 0:
     msg = 'This passenger is predicted to have {:.2f} chance to be: **died**'.format(predtest[0]*100)

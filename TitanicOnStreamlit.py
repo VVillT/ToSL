@@ -100,8 +100,8 @@ st.write(predtest[0])
 st.write(predtest[1])
 
 if y_pred == 0:
-    msg = 'This passenger is predicted to have {:.2f} chance to be: **died**'.format(predtest[0]*100)
+    msg = f"This passenger is predicted to have {predtest[0][0]*100:.2f}% chance to be: **died**"
 else:
-    msg = 'This passenger is predicted to have {:.2f} chance to be: **survived**'.format(predtest[1]*100)
+    msg = f"This passenger is predicted to have {predtest[0][1]*100:.2f}% chance to be: **survived**"
 
 st.write(msg)

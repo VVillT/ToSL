@@ -87,6 +87,9 @@ rf.fit(x_train, y_train)
 st.write('Forecast Done')  
 
 transformed_passenger = transform_passenger_data(passenger)
+st.write(passenger)
+st.write('----------------------')
+st.write(transformed_passenger)
 
 
 y_pred = rf.predict(transformed_passenger)

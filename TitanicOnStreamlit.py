@@ -18,48 +18,6 @@ st.markdown('**Please provide information of the passenger and we will see how l
 
 
 
-# get inputs
-
-sex = st.selectbox('Sex', ['female', 'male'])
-age = int(st.number_input('Age:', 0, 120, 20))
-sib_sp = int(st.number_input('# of siblings / spouses aboard:', 0, 10, 0))
-par_ch = int(st.number_input('# of parents / children aboard:', 0, 10, 0))
-pclass = st.selectbox('Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)', [1, 2, 3])
-embarked = st.selectbox('Port of Embarkation (C = Cherbourg, Q = Queenstown, S = Southampton)', ['C', 'Q', 'S'])
-
-passenger = pd.DataFrame(
-    {
-        'Pclass': [pclass],
-        'Sex': [sex], 
-        'Age': [age],
-        'SibSp': [sib_sp],
-        'Parch': [par_ch],
-#        'Fare': [fare],
-        'Embarked': [embarked],
-    }
-)
-
-def transform_passenger_data(passenger_data):
-    # Initialize transformed data as a dictionary
-    transformed_data = {
-        'Age': passenger_data['Age'][0] if passenger_data['Age'] is not None else np.nan,
-        'SibSp': passenger_data['SibSp'][0],
-        'Parch': passenger_data['Parch'][0],
-        'Sex_male': 1 if passenger_data['Sex'][0] == 'male' else 0,
-        'Embarked_Q': 1 if passenger_data['Embarked'][0] == 'Q' else 0,
-        'Embarked_S': 1 if passenger_data['Embarked'][0] == 'S' else 0,
-        'Pclass_2': 1 if passenger_data['Pclass'][0] == 2 else 0,
-        'Pclass_3': 1 if passenger_data['Pclass'][0] == 3 else 0
-    }
-    
-    # Convert the dictionary to a DataFrame with the correct column order
-    df_transformed = pd.DataFrame([transformed_data])
-    
-    return df_transformed
-
-
-
-
 #---------------------------------#
 test = pd.read_csv("test.csv")
 train = pd.read_csv("train.csv")
@@ -84,24 +42,58 @@ st.write(x_train.columns)
 # Random Forest Classifier
 rf = RandomForestClassifier(random_state=0)
 rf.fit(x_train, y_train)
-st.write('Forecast Done')  
+st.cache()
 
-transformed_passenger = transform_passenger_data(passenger)
-st.write(passenger)
-st.write('----------------------')
-st.write(transformed_passenger)
+def transform_passenger_data(passenger_data):
+    # Initialize transformed data as a dictionary
+    transformed_data = {
+        'Age': passenger_data['Age'][0] if passenger_data['Age'] is not None else np.nan,
+        'SibSp': passenger_data['SibSp'][0],
+        'Parch': passenger_data['Parch'][0],
+        'Sex_male': 1 if passenger_data['Sex'][0] == 'male' else 0,
+        'Embarked_Q': 1 if passenger_data['Embarked'][0] == 'Q' else 0,
+        'Embarked_S': 1 if passenger_data['Embarked'][0] == 'S' else 0,
+        'Pclass_2': 1 if passenger_data['Pclass'][0] == 2 else 0,
+        'Pclass_3': 1 if passenger_data['Pclass'][0] == 3 else 0
+    }
+    # Convert the dictionary to a DataFrame with the correct column order
+    df_transformed = pd.DataFrame([transformed_data])
+    
+    return df_transformed
 
 
-y_pred = rf.predict(transformed_passenger)
-st.write(y_pred)
-st.write(y_pred[0])
-predtest = rf.predict_proba(transformed_passenger)
-st.write(predtest[0])
-st.write(predtest[1])
+# get inputs
+cols = st.columns(2)
 
-if y_pred[0] == 0:
-    msg = f"This passenger is predicted to have {predtest[0][0]*100:.2f}% chance to be: **died**"
-else:
-    msg = f"This passenger is predicted to have {predtest[0][1]*100:.2f}% chance to be: **survived**"
+with cols[0]:
+	sex = st.selectbox('Sex', ['female', 'male'])
+	age = int(st.number_input('Age:', 0, 120, 20))
+	sib_sp = int(st.number_input('# of siblings / spouses aboard:', 0, 10, 0))
+	par_ch = int(st.number_input('# of parents / children aboard:', 0, 10, 0))
+	pclass = st.selectbox('Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)', [1, 2, 3])
+	embarked = st.selectbox('Port of Embarkation (C = Cherbourg, Q = Queenstown, S = Southampton)', ['C', 'Q', 'S'])
+	
+	passenger = pd.DataFrame(
+	    {
+	        'Pclass': [pclass],
+	        'Sex': [sex], 
+	        'Age': [age],
+	        'SibSp': [sib_sp],
+	        'Parch': [par_ch],
+	#        'Fare': [fare],
+	        'Embarked': [embarked],
+	    }
+	)
 
-st.write(msg)
+	transformed_passenger = transform_passenger_data(passenger)
+
+	y_pred = rf.predict(transformed_passenger)
+	predtest = rf.predict_proba(transformed_passenger)
+
+with cols[1]:
+	if y_pred[0] == 0:
+	    msg = f"This passenger is predicted to have {predtest[0][0]*100:.2f}% chance to be: **died**"
+	else:
+	    msg = f"This passenger is predicted to have {predtest[0][1]*100:.2f}% chance to be: **survived**"
+	
+	st.write(msg)

@@ -12,7 +12,7 @@ st.subheader('Making Prediction')
 st.markdown('**Please provide information of the passenger and we will see how likely he will survive**:')  # you can use markdown like this
 
 # load models
-#tree_clf = joblib.load('gbc_best.pickle')
+tree_clf = joblib.load('gbc_best.pickle')
 
 # get inputs
 
@@ -36,10 +36,10 @@ passenger = pd.DataFrame(
     }
 )
 
-#y_pred = tree_clf.predict(passenger)
-y_pred = 1
-#if y_pred[0] == 0:
-if y_pred == 0:
+y_pred = tree_clf.predict(passenger)
+#y_pred = 1
+if y_pred[0] == 0:
+#if y_pred == 0:
     msg = 'This passenger is predicted to be: **died**'
 else:
     msg = 'This passenger is predicted to be: **survived**'

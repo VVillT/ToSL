@@ -1,9 +1,11 @@
 import streamlit as st
-import pandas as pd
-import sklearn as skl
-from sklearn.ensemble import GradientBoostingClassifier
-import joblib
-import pickle
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+
+# Import Random Forest Classifier, SimpleImputer, train_test_split, GridSearchCV and metrics from sklearn
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 #---------------------------------#
 # Page layout
 ## Page expands to full width
@@ -58,21 +60,33 @@ def transform_passenger_data(passenger_data):
 transformed_passenger = transform_passenger_data(passenger)
 transformed_passenger
 
-# load models
-clf2 = joblib.load('rf_optimal.sav')
-#uploaded_file = st.file_uploader("Upload Model")
 
+#---------------------------------#
+test = pd.read_csv("test.csv")
+train = pd.read_csv("train.csv")
+testpt2 = pd.read_csv("gender_submission.csv")
+testfull = pd.merge(test, testpt2 , on= "PassengerId")
 
-#if uploaded_file is not None:
-    #clf2 = pickle.loads(uploaded_file.read())
-    #st.write("Model loaded")
-    #st.write(clf2)
-    #st.write("Predicting...")
-    #st.write(clf2.predict(passenger))
-    #st.write("Done!")
+#---------------------------------#
+y_train = pd.DataFrame(train['Survived'])
+x_train = train[['Age', 'SibSp', 'Parch' , 'Sex', 'Embarked' ,'Pclass']]
 
-y_pred = clf2.predict(passenger)
-predtest = clf2.predict_proba(passenger)
+# Rebuilding pickle without pipelines:
+num_features = ['Age', 'SibSp', 'Parch']
+cat_features = ['Sex','Embarked','Pclass']
+
+#Create transformation code so that Streamlit wont be dependent on Pipeline which is causing issues. 
+for n in num_features:
+	x_train[n] = x_train[n].fillna(x_train[n].mean())
+for c in cat_features:
+	x_train = pd.get_dummies(x_train, columns=[c], drop_first=True)
+      
+# Random Forest Classifier
+rf = RandomForestClassifier(random_state=0)
+rf.fit(x_train, y_train)
+
+y_pred = rf.predict(passenger)
+predtest = rf.predict_proba(passenger)
 
 if y_pred[0] == 0:
     msg = 'This passenger is predicted to have {:.2f} chance to be: **died**'.format(predtest[0]*100)

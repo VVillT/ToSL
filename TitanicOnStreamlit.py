@@ -36,8 +36,7 @@ cat_features = ['Sex','Embarked','Pclass']
 for n in num_features:
 	x_train[n] = x_train[n].fillna(x_train[n].mean())
 for c in cat_features:
-	x_train = pd.get_dummies(x_train, columns=[c], drop_first=True)
-st.write(x_train.columns)      
+	x_train = pd.get_dummies(x_train, columns=[c], drop_first=True)      
 
 # Random Forest Classifier
 rf = RandomForestClassifier(random_state=0)
